@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Form with Bootstrap</title>
+    <title>Formulário de Patrimônio</title>
     <link
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
@@ -14,7 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
     <style>
       .form-container {
-        max-width: 500px;
+        max-width: 600px;
         margin: auto;
         margin-top: 50px;
         padding: 20px;
@@ -26,106 +26,146 @@
   <body class="bg-light">
     <div class="container">
       <div class="form-container">
-        <h4 class="text-center mb-4">Form Submission to Google Sheet</h4>
+        <h4 class="text-center mb-4">Cadastro de Patrimônio</h4>
         <form id="submit-to-google-sheet">
           <div class="form-group">
-            <label for="name">Name:</label>
+            <label for="patrimonio">Nº Patrimônio:</label>
             <input
               class="form-control"
               type="text"
-              name="name"
-              id="name"
-              placeholder="Name"
+              name="patrimonio"
+              id="patrimonio"
+              placeholder="Nº Patrimônio"
               required
             />
           </div>
           <div class="form-group">
-            <label for="email">Email:</label>
-            <input
-              class="form-control"
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Email"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="slip">Contact Number:</label>
+            <label for="descricao">Descrição do Bem:</label>
             <input
               class="form-control"
               type="text"
-              name="contact_number"
-              id="contact_number"
-              placeholder="Contact Number"
+              name="descricao"
+              id="descricao"
+              placeholder="Descrição do Bem"
               required
             />
           </div>
-
           <div class="form-group">
-            <label for="loc">Gender:</label>
-            <select class="form-control" name="gender" id="gender" required>
-              <option value="" disabled selected hidden>Choose...</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
+            <label for="setor">Setor/Localização:</label>
+            <input
+              class="form-control"
+              type="text"
+              name="setor"
+              id="setor"
+              placeholder="Setor/Localização"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="responsavel">Responsável:</label>
+            <input
+              class="form-control"
+              type="text"
+              name="responsavel"
+              id="responsavel"
+              placeholder="Responsável"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="origem">Origem do Bem:</label>
+            <input
+              class="form-control"
+              type="text"
+              name="origem"
+              id="origem"
+              placeholder="Origem do Bem"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="conservacao">Estado de Conservação:</label>
+            <select class="form-control" name="conservacao" id="conservacao" required>
+              <option value="" disabled selected hidden>Escolha...</option>
+              <option value="Bom">Bom</option>
+              <option value="Regular">Regular</option>
+              <option value="Ruim">Ruim</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="loc">Message:</label>
-            <textarea
+            <label for="situacao">Situação Atual:</label>
+            <select class="form-control" name="situacao" id="situacao" required>
+              <option value="" disabled selected hidden>Escolha...</option>
+              <option value="Ativo">Ativo</option>
+              <option value="Inativo">Inativo</option>
+              <option value="Em Manutenção">Em Manutenção</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="aquisicao">Data da Aquisição:</label>
+            <input
               class="form-control"
-              name="message"
-              id="message"
-              placeholder="Message"
+              type="date"
+              name="aquisicao"
+              id="aquisicao"
               required
+            />
+          </div>
+          <div class="form-group">
+            <label for="notaFiscal">Nº Nota Fiscal:</label>
+            <input
+              class="form-control"
+              type="text"
+              name="notaFiscal"
+              id="notaFiscal"
+              placeholder="Nº Nota Fiscal"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="observacoes">Observações:</label>
+            <textarea
+                      class="form-control"
+              name="observacoes"
+              id="observacoes"
+              placeholder="Observações"
             ></textarea>
-          <div class="form-group form-check mt-2">
-            <input class="form-check-input" type="checkbox" id="age" />
-            <label class="form-check-label" for="age"
-              >Check if you are over 18 years old</label
-            >
           </div>
           <div class="form-group form-check">
-            <input class="form-check-input" type="checkbox" id="ex" required />
-            <label class="form-check-label" for="ex"
-              >By checking this box I certify that I am agree with the data
-              terms and policies.
+            <input class="form-check-input" type="checkbox" id="confirmar" required />
+            <label class="form-check-label" for="confirmar">
+              Confirmo que os dados fornecidos estão corretos.
             </label>
           </div>
           <button type="submit" class="btn btn-primary btn-block">
-            Submit
+            Enviar
           </button>
         </form>
       </div>
     </div>
 
     <script>
-      const scriptURL =                       
-      "https://script.google.com/macros/s/AKfycbwyWnZcfmIHy7K2-kcC3vzoBAclh-g_J-QCrAl-X9QxTHu0XT1mNaqsbZjhdiANJXLEvw/exec";
+      const scriptURL =
+        "https://script.google.com/macros/s/AKfycbwyWnZcfmIHy7K2-kcC3vzoBAclh-g_J-QCrAl-X9QxTHu0XT1mNaqsbZjhdiANJXLEvw/exec";
       const form = document.forms["submit-to-google-sheet"];
       form.addEventListener("submit", (e) => {
         e.preventDefault();
         var formData = new FormData(form);
-        var ex = document.getElementById("ex").checked;
-        var age = document.getElementById("age").checked;
+        var confirmar = document.getElementById("confirmar").checked;
 
-        if (age) {
-          formData.append("age", "Yes");
+        if (confirmar) {
+          formData.append("confirmar", "Sim");
         } else {
-          formData.append("age", "No");
-        }
-        if (ex) {
-          formData.append("ex", "Yes");
-        } else {
-          formData.append("ex", "No");
+          formData.append("confirmar", "Não");
         }
 
         fetch(scriptURL, { method: "POST", body: formData })
           .then((response) => {
-            swal("Done", "Submitted Successfully.", "success");
+            swal("Sucesso", "Dados enviados com sucesso!", "success");
+            form.reset();
           })
           .catch((error) => {
-            swal("Error", "Something went wrong. please try again!", "error");
+            swal("Erro", "Algo deu errado. Tente novamente!", "error");
           });
       });
     </script>
