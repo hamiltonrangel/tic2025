@@ -177,18 +177,6 @@
               required
             />
           </div>
-        <!--  <div class="form-group">
-            <label for="notaFiscal">Nº Nota Fiscal:</label>
-            <input
-              class="form-control"
-              type="text"
-              name="notaFiscal"
-              id="notaFiscal"
-              placeholder="Nº Nota Fiscal"
-              required
-            />
-          </div>
-          -->
           <div class="form-group">
             <label for="observacoes">Observações:</label>
             <textarea
@@ -198,14 +186,6 @@
               placeholder="Observações"
             ></textarea>
           </div>
-         
-   <!--       <div class="form-group form-check">
-            <input class="form-check-input" type="checkbox" id="confirmar" required />
-            <label class="form-check-label" for="confirmar">
-              Confirmo que os dados fornecidos estão corretos.
-            </label>
-          </div>
-     -->     
           <button type="submit" class="btn btn-primary btn-block">
             Enviar
           </button>
@@ -223,9 +203,7 @@
       const departamentosPorSecretaria = {
         AGILIZA: ["ADM"],
         COMUS: ["SESAU"],
-        EMEI: ["ALEGRIA DAS CRIANÇAS"],
         "FUNDAÇÃO SAÚDE": ["CASA DA ONCOLOGIA", "HOSPITAL DE BOIÇUCANGA"],
-        "POLICIA MILITAR": ["CENTRO", "COSTA SUL"],
         SAJUR: [
           "Corregedoria",
           "Divisão Administrativa",
@@ -639,13 +617,6 @@
       form.addEventListener("submit", (e) => {
         e.preventDefault();
         var formData = new FormData(form);
-        var confirmar = document.getElementById("confirmar").checked;
-
-        if (confirmar) {
-          formData.append("confirmar", "Sim");
-        } else {
-          formData.append("confirmar", "Não");
-        }
 
         fetch(scriptURL, { method: "POST", body: formData })
           .then((response) => {
@@ -657,6 +628,7 @@
           })
           .catch((error) => {
             swal("Erro", "Algo deu errado. Tente novamente!", "error");
+            console.error('Erro:', error);
           });
       });
     </script>
