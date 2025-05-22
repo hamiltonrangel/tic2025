@@ -218,16 +218,6 @@
             />
           </div>
           <div class="form-group">
-            <label for="notaFiscal">Nota Fiscal:</label>
-            <input
-              class="form-control"
-              type="text"
-              name="notaFiscal"
-              id="notaFiscal"
-              placeholder="Nota Fiscal"
-            />
-          </div>
-          <div class="form-group">
             <label for="observacoes">Observações:</label>
             <textarea
               class="form-control"
@@ -238,6 +228,9 @@
           </div>
           <button type="submit" class="btn btn-primary btn-block">
             Enviar
+          </button>
+          <button type="button" class="btn btn-secondary btn-block" id="clear-button">
+            Limpar Campos
           </button>
         </form>
       </div>
@@ -251,6 +244,7 @@
       const departamentoSelect = document.getElementById("departamento");
       const searchButton = document.getElementById("search-button");
       const searchInput = document.getElementById("search-patrimonio");
+      const clearButton = document.getElementById("clear-button");
 
       const departamentosPorSecretaria = {
         AGILIZA: ["ADM"],
@@ -712,7 +706,6 @@
                   <strong>Estado de Conservação:</strong> ${result['conservacao']}<br>
                   <strong>Situação Atual:</strong> ${result['situacao']}<br>
                   <strong>Data da Aquisição:</strong> ${result['aquisicao']}<br>
-                  <strong>Nota Fiscal:</strong> ${result['notaFiscal'] || 'Nenhuma'}<br>
                   <strong>Observações:</strong> ${result['observacoes'] || 'Nenhuma'}<br>
                   <strong>Data de Cadastro:</strong> ${result['timestamp'] || 'N/A'}
                 `;
@@ -733,6 +726,14 @@
             swal("Erro", "Falha ao realizar a pesquisa. Tente novamente!", "error");
             console.error('Erro na pesquisa:', error);
           });
+      });
+
+      clearButton.addEventListener("click", () => {
+        form.reset();
+        departamentoSelect.innerHTML =
+          '<option value="" disabled selected hidden>Selecione uma secretaria primeiro...</option>';
+        departamentoSelect.disabled = true;
+        swal("Campos Limpos", "Os campos do formulário foram limpos!", "info");
       });
     </script>
   </body>
