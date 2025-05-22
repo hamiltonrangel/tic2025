@@ -218,6 +218,16 @@
             />
           </div>
           <div class="form-group">
+            <label for="notaFiscal">Nota Fiscal:</label>
+            <input
+              class="form-control"
+              type="text"
+              name="notaFiscal"
+              id="notaFiscal"
+              placeholder="Nota Fiscal"
+            />
+          </div>
+          <div class="form-group">
             <label for="observacoes">Observações:</label>
             <textarea
               class="form-control"
@@ -662,11 +672,6 @@
 
         fetch(scriptURL, { method: "POST", body: formData })
           .then((response) => {
-            console.log('Status HTTP (POST):', response.status);
-            return response.json();
-          })
-          .then((data) => {
-            console.log('Resposta POST:', data);
             swal("Sucesso", "Dados enviados com sucesso!", "success");
             form.reset();
             departamentoSelect.innerHTML =
@@ -675,7 +680,7 @@
           })
           .catch((error) => {
             swal("Erro", "Algo deu errado. Tente novamente!", "error");
-            console.error('Erro no POST:', error);
+            console.error('Erro:', error);
           });
       });
 
@@ -686,31 +691,30 @@
           return;
         }
 
-        const url = `${scriptURL}?patrimonio=${encodeURIComponent(patrimonio)}`;
-        console.log('Enviando GET para:', url);
-        fetch(url, { method: "GET" })
+        fetch(`${scriptURL}?patrimonio=${encodeURIComponent(patrimonio)}`, { method: "GET" })
           .then((response) => {
-            console.log('Status HTTP (GET):', response.status);
+            console.log('Status HTTP:', response.status);
             return response.text();
           })
           .then((text) => {
-            console.log('Resposta bruta (GET):', text);
+            console.log('Resposta bruta:', text);
             try {
               const data = JSON.parse(text);
               if (data.result === "success" && data.data) {
                 const result = data.data;
                 const message = `
-                  <strong>Nº Patrimônio:</strong> ${result['Nº Patrimônio']}<br>
-                  <strong>Descrição do Bem:</strong> ${result['Descrição do Bem']}<br>
-                  <strong>Secretaria:</strong> ${result['Secretaria']}<br>
-                  <strong>Departamento:</strong> ${result['Departamento']}<br>
-                  <strong>Responsável:</strong> ${result['Responsável']}<br>
-                  <strong>Origem do Bem:</strong> ${result['Origem do Bem']}<br>
-                  <strong>Estado de Conservação:</strong> ${result['Estado de Conservação']}<br>
-                  <strong>Situação Atual:</strong> ${result['Situação Atual']}<br>
-                  <strong>Data da Aquisição:</strong> ${result['Data da Aquisição']}<br>
-                  <strong>Observações:</strong> ${result['Observações'] || 'Nenhuma'}<br>
-                  <strong>Data de Cadastro:</strong> ${result['timestamp']}
+                  <strong>Nº Patrimônio:</strong> ${result['patrimonio']}<br>
+                  <strong>Descrição do Bem:</strong> ${result['descricao']}<br>
+                  <strong>Secretaria:</strong> ${result['secretaria']}<br>
+                  <strong>Departamento:</strong> ${result['departamento']}<br>
+                  <strong>Responsável:</strong> ${result['responsavel']}<br>
+                  <strong>Origem do Bem:</strong> ${result['origem']}<br>
+                  <strong>Estado de Conservação:</strong> ${result['conservacao']}<br>
+                  <strong>Situação Atual:</strong> ${result['situacao']}<br>
+                  <strong>Data da Aquisição:</strong> ${result['aquisicao']}<br>
+                  <strong>Nota Fiscal:</strong> ${result['notaFiscal'] || 'Nenhuma'}<br>
+                  <strong>Observações:</strong> ${result['observacoes'] || 'Nenhuma'}<br>
+                  <strong>Data de Cadastro:</strong> ${result['timestamp'] || 'N/A'}
                 `;
                 swal({
                   title: "Patrimônio Encontrado",
@@ -721,13 +725,13 @@
                 swal("Não Encontrado", "Nenhum patrimônio encontrado com este número!", "info");
               }
             } catch (error) {
-              console.error('Erro ao parsear JSON (GET):', error, 'Resposta:', text);
+              console.error('Erro ao parsear JSON:', error, 'Resposta:', text);
               throw error;
             }
           })
           .catch((error) => {
             swal("Erro", "Falha ao realizar a pesquisa. Tente novamente!", "error");
-            console.error('Erro na pesquisa (GET):', error);
+            console.error('Erro na pesquisa:', error);
           });
       });
     </script>
