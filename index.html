@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Formulário de Patrimônio</title>
+    <link rel="icon" type="image/x-icon" href="/tic2025/favicon.ico">
     <link
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
@@ -234,7 +235,7 @@
 
     <script>
       const scriptURL =
-        "https://script.google.com/macros/s/AKfycbwyWnZcfmIHy7K2-kcC3vzoBAclh-g_J-QCrAl-X9QxTHu0XT1mNaqsbZjhdiANJXLEvw/exec";
+        "https://script.google.com/macros/s/AKfycbxXSvPQw8z_U-XigQuLCCUyU3W50VzYEtrkhjGN8a_lbJQ5yI-euVNRV_Xu6rBWCrE8CA/exec";
       const form = document.forms["submit-to-google-sheet"];
       const secretariaSelect = document.getElementById("secretaria");
       const departamentoSelect = document.getElementById("departamento");
@@ -661,6 +662,11 @@
 
         fetch(scriptURL, { method: "POST", body: formData })
           .then((response) => {
+            console.log('Status HTTP (POST):', response.status);
+            return response.json();
+          })
+          .then((data) => {
+            console.log('Resposta POST:', data);
             swal("Sucesso", "Dados enviados com sucesso!", "success");
             form.reset();
             departamentoSelect.innerHTML =
@@ -669,7 +675,7 @@
           })
           .catch((error) => {
             swal("Erro", "Algo deu errado. Tente novamente!", "error");
-            console.error('Erro:', error);
+            console.error('Erro no POST:', error);
           });
       });
 
@@ -680,36 +686,48 @@
           return;
         }
 
-        fetch(`${scriptURL}?patrimonio=${encodeURIComponent(patrimonio)}`, { method: "GET" })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.result === "success" && data.data) {
-              const result = data.data;
-              const message = `
-                <strong>Nº Patrimônio:</strong> ${result['Nº Patrimônio']}<br>
-                <strong>Descrição do Bem:</strong> ${result['Descrição do Bem']}<br>
-                <strong>Secretaria:</strong> ${result['Secretaria']}<br>
-                <strong>Departamento:</strong> ${result['Departamento']}<br>
-                <strong>Responsável:</strong> ${result['Responsável']}<br>
-                <strong>Origem do Bem:</strong> ${result['Origem do Bem']}<br>
-                <strong>Estado de Conservação:</strong> ${result['Estado de Conservação']}<br>
-                <strong>Situação Atual:</strong> ${result['Situação Atual']}<br>
-                <strong>Data da Aquisição:</strong> ${result['Data da Aquisição']}<br>
-                <strong>Observações:</strong> ${result['Observações'] || 'Nenhuma'}<br>
-                <strong>Data de Cadastro:</strong> ${result['timestamp']}
-              `;
-              swal({
-                title: "Patrimônio Encontrado",
-                html: message,
-                type: "success"
-              });
-            } else {
-              swal("Não Encontrado", "Nenhum patrimônio encontrado com este número!", "info");
+        const url = `${scriptURL}?patrimonio=${encodeURIComponent(patrimonio)}`;
+        console.log('Enviando GET para:', url);
+        fetch(url, { method: "GET" })
+          .then((response) => {
+            console.log('Status HTTP (GET):', response.status);
+            return response.text();
+          })
+          .then((text) => {
+            console.log('Resposta bruta (GET):', text);
+            try {
+              const data = JSON.parse(text);
+              if (data.result === "success" && data.data) {
+                const result = data.data;
+                const message = `
+                  <strong>Nº Patrimônio:</strong> ${result['Nº Patrimônio']}<br>
+                  <strong>Descrição do Bem:</strong> ${result['Descrição do Bem']}<br>
+                  <strong>Secretaria:</strong> ${result['Secretaria']}<br>
+                  <strong>Departamento:</strong> ${result['Departamento']}<br>
+                  <strong>Responsável:</strong> ${result['Responsável']}<br>
+                  <strong>Origem do Bem:</strong> ${result['Origem do Bem']}<br>
+                  <strong>Estado de Conservação:</strong> ${result['Estado de Conservação']}<br>
+                  <strong>Situação Atual:</strong> ${result['Situação Atual']}<br>
+                  <strong>Data da Aquisição:</strong> ${result['Data da Aquisição']}<br>
+                  <strong>Observações:</strong> ${result['Observações'] || 'Nenhuma'}<br>
+                  <strong>Data de Cadastro:</strong> ${result['timestamp']}
+                `;
+                swal({
+                  title: "Patrimônio Encontrado",
+                  html: message,
+                  type: "success"
+                });
+              } else {
+                swal("Não Encontrado", "Nenhum patrimônio encontrado com este número!", "info");
+              }
+            } catch (error) {
+              console.error('Erro ao parsear JSON (GET):', error, 'Resposta:', text);
+              throw error;
             }
           })
           .catch((error) => {
             swal("Erro", "Falha ao realizar a pesquisa. Tente novamente!", "error");
-            console.error('Erro na pesquisa:', error);
+            console.error('Erro na pesquisa (GET):', error);
           });
       });
     </script>
