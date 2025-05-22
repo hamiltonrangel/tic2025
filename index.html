@@ -29,6 +29,17 @@
         display: block;
         margin: 0 auto 20px;
       }
+      .search-container {
+        margin-bottom: 20px;
+      }
+      .search-container input {
+        max-width: 70%;
+        display: inline-block;
+      }
+      .search-container button {
+        max-width: 28%;
+        margin-left: 2%;
+      }
     </style>
   </head>
   <body class="bg-light">
@@ -39,7 +50,22 @@
           alt="Logo da Prefeitura de São Sebastião"
           class="logo"
         />
-        <h4 class="text-center mb-4">Cadastro de Patrimônio</h4>
+        <h4 class="text-center mb-4">Pesquisa e Cadastro de Patrimônio</h4>
+        
+        <!-- Seção de Pesquisa -->
+        <div class="search-container">
+          <input
+            class="form-control"
+            type="text"
+            id="search-patrimonio"
+            placeholder="Digite o Nº Patrimônio"
+          />
+          <button type="button" class="btn btn-secondary" id="search-button">
+            Pesquisar
+          </button>
+        </div>
+
+        <!-- Formulário de Cadastro -->
         <form id="submit-to-google-sheet">
           <div class="form-group">
             <label for="patrimonio">Nº Patrimônio:</label>
@@ -212,6 +238,8 @@
       const form = document.forms["submit-to-google-sheet"];
       const secretariaSelect = document.getElementById("secretaria");
       const departamentoSelect = document.getElementById("departamento");
+      const searchButton = document.getElementById("search-button");
+      const searchInput = document.getElementById("search-patrimonio");
 
       const departamentosPorSecretaria = {
         AGILIZA: ["ADM"],
@@ -436,4 +464,254 @@
           "Divisão de Habitação Popular",
           "Divisão de Orçamento",
           "Divisão de Projetos Urbanísticos",
-          "Recep
+          "Recepção"
+        ],
+        SEMAM: [
+          "Departamento de Meio Ambiente",
+          "Departamento de Pesca e Abastecimento",
+          "Divisão - Licenciamento Ambiental",
+          "Divisão de Agricultura e Abastecimento",
+          "Divisão de Educação Ambiental",
+          "Divisão de Fiscalização de Agressões Ambientais",
+          "Divisão de Pesca",
+          "Divisão de Recursos Hídricos",
+          "Divisão de Resíduos Urbanos",
+          "Divisão de Saneamento",
+          "Observatório"
+        ],
+        SEO: [
+          "Departamento de Obras Particulares",
+          "Departamento de Obras Públicas",
+          "Divisão Administrativa",
+          "Divisão de Fiscalização",
+          "Divisão de Fiscalização de Obras Públicas",
+          "Divisão de Gerenciamento de Contratos",
+          "Divisão de Licenciamento Ambiental",
+          "Divisão de Licenciamento de Obras Particulares",
+          "Divisão de Projetos e Orçamentos",
+          "Divisão de Pré-análise de Projetos",
+          "Divisão de Topografia",
+          "Protocolo",
+          "Secretaria de Obras"
+        ],
+        SEPEDI: [
+          "Departamento de Políticas das Pessoas com Deficiência",
+          "Departamento de Políticas de Pessoas Idosas",
+          "Divisão Administrativa",
+          "Divisão de Atendimento Especializado ao Idoso",
+          "Divisão de Atendimento e Benefícios",
+          "Divisão de Programas e Projetos Inclusivos",
+          "Divisão de Programas e Projetos a Pessoas Idosas"
+        ],
+        SEPLAN: [
+          "ADM",
+          "Administrativo",
+          "Departamento de Planejamento",
+          "Departamento de Tecnologia e Informação"
+        ],
+        SESAU: [
+          "ALMOXARIFADO DA SAÚDE",
+          "Assistência Social",
+          "CAPS AD",
+          "CAPS INFANTIL",
+          "CAPS1 - TOPOLANDIA",
+          "CASA DA DENGUE",
+          "CEMIN - Topolândia",
+          "CENTRAL DE REGULAÇÃO",
+          "CENTRO DE REABILITAÇÃO BOIÇUCANGA",
+          "CENTRO ESPECIALIDADES COSTA NORTE",
+          "CEO - Centro de Especialidades Odontologicas",
+          "CIAMA - Topolândia",
+          "COMUS",
+          "Centro de Saude Enseada",
+          "Centro de Saúde Centro",
+          "Centro de saúde Topolândia",
+          "DEPARTAMENTO DE PLANEJAMENTO EM SAÚDE",
+          "Departamento de Administração e Controle",
+          "Departamento de Planejamto",
+          "Departamento de Vigilância e Saúde",
+          "Divisão Administrativa",
+          "Divisão Médica",
+          "Divisão Odontológica",
+          "Divisão de Avaliação e Controle",
+          "Divisão de Controle de Zoonoses e Vetores",
+          "Divisão de Emergências",
+          "Divisão de Enfermagem e Técnicos",
+          "Divisão de Expediente",
+          "Divisão de Ouvidoria",
+          "Divisão de Programas",
+          "Divisão de Recursos Humanos",
+          "Divisão de Tráfego Centro e Costa Norte",
+          "Divisão de Tráfego Costa Sul",
+          "Divisão de Vigilância Epidemiológica",
+          "Divisão de Vigilância Sanitária",
+          "FUNDAÇÃO DE SAÚDE",
+          "FUNDO MUNICIPAL DE SAÚDE",
+          "Farmácia - Rodoviária",
+          "GABINETE SAÚDE",
+          "HOSPITAL",
+          "HOSPITAL DAS CLÍNICAS BOIÇUCANGA",
+          "Monitoramento COVID-19",
+          "PSF PAÚBA",
+          "Posto de Saude Barequeçaba",
+          "REABILITAÇÃO TOPOLANDIA",
+          "REFORÇA",
+          "SAMU",
+          "Serviço Social",
+          "UBS Boiçucanga",
+          "UBS Enseada",
+          "UBS Morro do Abrigo",
+          "USF BAREQUEÇABA",
+          "USF BARRA DO SAÍ",
+          "USF BARRA DO UNA",
+          "USF BOIÇUCANGA 1",
+          "USF BOIÇUCANGA 2",
+          "USF CAMBURI",
+          "USF CANTO DO MAR",
+          "USF CENTRO",
+          "USF ENSEADA 1",
+          "USF ENSEADA 2",
+          "USF ITATINGA 1",
+          "USF ITATINGA 2",
+          "USF JARAGUA",
+          "USF JUQUEI 1",
+          "USF JUQUEI 2",
+          "USF MARESIAS 2",
+          "USF MARESIAS I",
+          "USF MORRO DO ABRIGO",
+          "USF OLARIA",
+          "USF PONTAL DA CRUZ",
+          "USF VARADOURO",
+          "USO",
+          "USO - Vila Amélia"
+        ],
+        SESEP: [
+          "Dep. da Adm. Centro",
+          "Dep. da Adm. Costa Norte",
+          "Dep. da Adm. Costa Sul",
+          "Dep. da Adm. Topolândia",
+          "Departamento de Frota",
+          "Divisão Administrativa",
+          "Divisão Boiçucanga",
+          "Divisão Centro Sul",
+          "Divisão Costa Norte",
+          "Divisão Juquehy",
+          "Divisão Maresias",
+          "Divisão de Cemitérios",
+          "Divisão de Centro Norte",
+          "Divisão de Custo Financeiro",
+          "Reg. Barequeçaba",
+          "Regional Costa Sul",
+          "Topolândia",
+          "VIVEIRO CENTRAL"
+        ],
+        SETUR: [
+          "Batuíra",
+          "Biblioteca",
+          "CIT",
+          "Casa da Arte",
+          "Casa da Cultura",
+          "Casa da Música",
+          "Departamento de Cultura",
+          "Departamento de Patrimônio",
+          "Departamento de Turismo",
+          "Divisão de Administração dos Balneários",
+          "Divisão de Eventos Culturais",
+          "Divisão de Fomento ao Turismo",
+          "Divisão de Patrimônio Histórico",
+          "Divisão de Terminais Rodoviários",
+          "Fundação Deodato Santana",
+          "Núcleo de Arqueologia",
+          "Praça do pôr do sol",
+          "Projeto Guri",
+          "Teatro",
+          "VIDA MARINHA"
+        ],
+        SEURB: [
+          "Cadastro Técnico",
+          "Departamento Administrativo",
+          "Departamento de Planejamento",
+          "Divisão de Cadastro Imobiliário",
+          "Divisão de Fiscalização de Obras Particulares",
+          "Secretaria de Urbanismo"
+        ]
+      };
+
+      secretariaSelect.addEventListener("change", function () {
+        const selectedSecretaria = this.value;
+        departamentoSelect.innerHTML =
+          '<option value="" disabled selected hidden>Escolha...</option>';
+
+        if (selectedSecretaria && departamentosPorSecretaria[selectedSecretaria]) {
+          departamentosPorSecretaria[selectedSecretaria].forEach((dep) => {
+            const option = document.createElement("option");
+            option.value = dep;
+            option.textContent = dep;
+            departamentoSelect.appendChild(option);
+          });
+          departamentoSelect.disabled = false;
+        } else {
+          departamentoSelect.disabled = true;
+        }
+      });
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        var formData = new FormData(form);
+
+        fetch(scriptURL, { method: "POST", body: formData })
+          .then((response) => {
+            swal("Sucesso", "Dados enviados com sucesso!", "success");
+            form.reset();
+            departamentoSelect.innerHTML =
+              '<option value="" disabled selected hidden>Selecione uma secretaria primeiro...</option>';
+            departamentoSelect.disabled = true;
+          })
+          .catch((error) => {
+            swal("Erro", "Algo deu errado. Tente novamente!", "error");
+            console.error('Erro:', error);
+          });
+      });
+
+      searchButton.addEventListener("click", () => {
+        const patrimonio = searchInput.value.trim();
+        if (!patrimonio) {
+          swal("Atenção", "Por favor, digite o Nº Patrimônio!", "warning");
+          return;
+        }
+
+        fetch(`${scriptURL}?patrimonio=${encodeURIComponent(patrimonio)}`, { method: "GET" })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.result === "success" && data.data) {
+              const result = data.data;
+              const message = `
+                <strong>Nº Patrimônio:</strong> ${result['Nº Patrimônio']}<br>
+                <strong>Descrição do Bem:</strong> ${result['Descrição do Bem']}<br>
+                <strong>Secretaria:</strong> ${result['Secretaria']}<br>
+                <strong>Departamento:</strong> ${result['Departamento']}<br>
+                <strong>Responsável:</strong> ${result['Responsável']}<br>
+                <strong>Origem do Bem:</strong> ${result['Origem do Bem']}<br>
+                <strong>Estado de Conservação:</strong> ${result['Estado de Conservação']}<br>
+                <strong>Situação Atual:</strong> ${result['Situação Atual']}<br>
+                <strong>Data da Aquisição:</strong> ${result['Data da Aquisição']}<br>
+                <strong>Observações:</strong> ${result['Observações'] || 'Nenhuma'}<br>
+                <strong>Data de Cadastro:</strong> ${result['timestamp']}
+              `;
+              swal({
+                title: "Patrimônio Encontrado",
+                html: message,
+                type: "success"
+              });
+            } else {
+              swal("Não Encontrado", "Nenhum patrimônio encontrado com este número!", "info");
+            }
+          })
+          .catch((error) => {
+            swal("Erro", "Falha ao realizar a pesquisa. Tente novamente!", "error");
+            console.error('Erro na pesquisa:', error);
+          });
+      });
+    </script>
+  </body>
+</html>
