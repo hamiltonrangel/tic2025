@@ -3,7 +3,747 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulário de Patrimôni<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Formulário de Patrimônio</title>
+    <link rel="icon" type="image/x-icon" href="/tic2025/favicon.ico">
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
+    <style>
+      .form-container {
+        max-width: 600px;
+        margin: auto;
+        margin-top: 50px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+      }
+      .logo {
+        max-width: auto;
+       /* max-height: 100px; */
+        width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto 20px;
+      }
+      .search-container {
+        margin-bottom: 20px;
+      }
+      .search-container input {
+        max-width: 70%;
+        display: inline-block;
+      }
+      .search-container button {
+        max-width: 40%;
+        margin-left: 2%;
+      }
+    </style>
+  </head>
+  <body class="bg-light">
+    <div class="container">
+      <div class="form-container">
+        <img
+          src="pmss2025.png"
+          alt="Logo da Prefeitura de São Sebastião"
+          class="logo"
+        />
+        <h4 class="text-center mb-4">Pesquisa e Cadastro de Patrimônio - TIC2025</h4>
+        
+        <!-- Seção de Pesquisa -->
+        <div class="search-container">
+          <input
+            class="form-control"
+            type="text"
+            id="search-patrimonio"
+            placeholder="Digite o Nº Patrimônio"
+          />
+          <button type="button" class="btn btn-secondary" id="search-button">
+            Pesquisar
+          </button>
+        </div>
+
+        <!-- Formulário de Cadastro -->
+        <form id="submit-to-google-sheet">
+          <div class="form-group">
+            <label for="patrimonio">Nº Patrimônio:</label>
+            <input
+              class="form-control"
+              type="text"
+              name="patrimonio"
+              id="patrimonio"
+              placeholder="Nº Patrimônio"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="descricao">Descrição do Bem:</label>
+            <select class="form-control" name="descricao" id="descricao" required>
+              <option value="" disabled selected hidden>Escolha...</option>
+              <optgroup label="Computadores e Periféricos">
+                <option value="Computador Desktop">Desktop</option>
+                <option value="Mini-PC">Mini-PC</option>
+                <option value="Notebook">Notebook</option>
+                <option value="All-in-One">All-in-One</option>
+                <option value="Monitor">Monitor</option>
+                <option value="Teclado">Teclado</option>
+                <option value="Mouse">Mouse</option>
+                <option value="Nobreak">Nobreak</option>
+                <option value="Estabilizador">Estabilizador</option>
+                <option value="Fonte de Alimentação">Fonte de Alimentação</option>
+              </optgroup>
+              <optgroup label="Impressoras e Digitalização">
+                <option value="Impressora Jato de Tinta">Impressora Jato de Tinta</option>
+                <option value="Impressora Laser">Impressora Laser</option>
+                <option value="Impressora Térmica">Impressora Térmica</option>
+                <option value="Impressora Multifuncional">Impressora Multifuncional</option>
+                <option value="Scanner">Scanner</option>
+                <option value="Plotter">Plotter</option>
+              </optgroup>
+              <optgroup label="Redes e Conectividade">
+                <option value="Switch">Switch</option>
+                <option value="Roteador Wi-Fi">Roteador Wi-Fi</option>
+                <option value="Access Point">Access Point</option>
+                <option value="Modem">Modem</option>
+                <option value="Patch Panel">Patch Panel</option>
+                <option value="Rack de Rede">Rack de Rede</option>
+              </optgroup>
+              <optgroup label="Telefonia">
+                <option value="Telefone IP">Telefone IP</option>
+                <option value="Telefone Analógico">Telefone Analógico</option>
+                <option value="Ramal VoIP">Ramal VoIP</option>
+                <option value="PABX">PABX</option>
+              </optgroup>
+              <optgroup label="Servidores e Armazenamento">
+                <option value="Servidor Físico">Servidor Físico</option>
+                <option value="NAS (Armazenamento em Rede)">NAS (Armazenamento em Rede)</option>
+                <option value="HD Externo">HD Externo</option>
+                <option value="SSD">SSD</option>
+                <option value="HD Interno">HD Interno</option>
+              </optgroup>
+              <optgroup label="Outros Equipamentos">
+                <option value="Projetor (Datashow)">Projetor (Datashow)</option>
+                <option value="Webcam">Webcam</option>
+                <option value="Leitor de Código de Barras">Leitor de Código de Barras</option>
+                <option value="Leitor Biométrico">Leitor Biométrico</option>
+                <option value="Token (de autenticação)">Token (de autenticação)</option>
+                <option value="Smart TV">Smart TV</option>
+                <option value="Tablet">Tablet</option>
+                <option value="Kindle / Leitor Digital">Kindle / Leitor Digital</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="secretaria">Secretaria:</label>
+            <select class="form-control" name="secretaria" id="secretaria" required>
+              <option value="" disabled selected hidden>Escolha...</option>
+              <option value="AGILIZA">AGILIZA</option>
+              <option value="COMUS">COMUS</option>
+              <option value="FUNDAÇÃO SAÚDE">FUNDAÇÃO SAÚDE</option>
+              <option value="SAJUR">SAJUR</option>
+              <option value="SECAD">SECAD</option>
+              <option value="SEDES">SEDES</option>
+              <option value="SEDUC">SEDUC</option>
+              <option value="SEESP">SEESP</option>
+              <option value="SEFAZ">SEFAZ</option>
+              <option value="SEGOV">SEGOV</option>
+              <option value="SEGUR">SEGUR</option>
+              <option value="SEHAB">SEHAB</option>
+              <option value="SEMAM">SEMAM</option>
+              <option value="SEO">SEO</option>
+              <option value="SEPEDI">SEPEDI</option>
+              <option value="SEPLAN">SEPLAN</option>
+              <option value="SESAU">SESAU</option>
+              <option value="SESEP">SESEP</option>
+              <option value="SETUR">SETUR</option>
+              <option value="SEURB">SEURB</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="departamento">Departamento:</label>
+            <select class="form-control" name="departamento" id="departamento" required>
+              <option value="" disabled selected hidden>Selecione uma: Escolha uma secretaria primeiro...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="responsavel">Responsável:</label>
+            <input
+              class="form-control"
+              type="text"
+              name="responsavel"
+              id="responsavel"
+              placeholder="Responsável"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="origem">Origem do Bem:</label>
+            <select class="form-control" name="origem" id="origem" required>
+              <option value="" disabled selected hidden>Escolha...</option>
+              <option value="Terceirizada (Altbit)">Terceirizada (Altbit)</option>
+              <option value="Terceirizada (Maquim)">Terceirizada (Maquim)</option>
+              <option value="Terceirizada (Outra)">Terceirizada (Outra)</option>
+              <option value="Patrimônio da Prefeitura">Patrimônio da Prefeitura</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="conservacao">Estado de Conservação:</label>
+            <select class="form-control" name="conservacao" id="conservacao" required>
+              <option value="" disabled selected hidden>Escolha...</option>
+              <option value="Bom">Bom</option>
+              <option value="Regular">Regular</option>
+              <option value="Ruim">Ruim</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="situacao">Situação Atual:</label>
+            <select class="form-control" name="situacao" id="situacao" required>
+              <option value="" disabled selected hidden>Escolha...</option>
+              <option value="Ativo">Ativo</option>
+              <option value="Inativo">Inativo</option>
+              <option value="Em Manutenção">Em Manutenção</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="aquisicao">Data da Aquisição:</label>
+            <input
+              class="form-control"
+              type="date"
+              name="aquisicao"
+              id="aquisicao"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="observacoes">Observações:</label>
+            <textarea
+              class="form-control"
+              name="observacoes"
+              id="observacoes"
+              placeholder="Observações"
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">
+            Enviar
+          </button>
+          <button type="button" class="btn btn-secondary btn-block" id="clear-button">
+            Limpar Campos
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const scriptURL =
+        "https://script.google.com/macros/s/AKfycbxXSvPQw8z_U-XigQuLCCUyU3W50VzYEtrkhjGN8a_lbJQ5yI-euVNRV_Xu6rBWCrE8CA/exec";
+      const form = document.forms["submit-to-google-sheet"];
+      const secretariaSelect = document.getElementById("secretaria");
+      const departamentoSelect = document.getElementById("departamento");
+      const searchButton = document.getElementById("search-button");
+      const searchInput = document.getElementById("search-patrimonio");
+      const clearButton = document.getElementById("clear-button");
+
+      const departamentosPorSecretaria = {
+        AGILIZA: ["ADM"],
+        COMUS: ["SESAU"],
+        "FUNDAÇÃO SAÚDE": ["CASA DA ONCOLOGIA", "HOSPITAL DE BOIÇUCANGA"],
+        SAJUR: [
+          "Corregedoria",
+          "Divisão Administrativa",
+          "Divisão Fiscal Administrativa",
+          "Divisão Fiscal Judicial",
+          "Divisão de Atendimento",
+          "Procuradoria Administrativa",
+          "Procuradoria Ambiental e Obras",
+          "Procuradoria Fiscal",
+          "Procuradoria Judicial",
+          "Procuradoria Trabalhista",
+          "Procuradoria de Defesa do Consumidor",
+          "Recepção",
+          "SEJUSC"
+        ],
+        SECAD: [
+          "ALMOXARIFADO",
+          "Arquivo Central",
+          "Departamento de Suprimentos",
+          "Divisão Patrimonial",
+          "Divisão de Benefícios",
+          "Divisão de Contratação de Serviços",
+          "Divisão de Controle de Tráfego",
+          "Divisão de Encargos Gerais",
+          "Divisão de Gestão de Estoques",
+          "Divisão de Manutenção",
+          "Divisão de Pagamentos e Controle",
+          "Divisão de Recrutamento, Seleção e Admissão",
+          "Gestão de Contratos",
+          "Segurança do Trabalho"
+        ],
+        SEDES: [
+          "ADMINISTRATIVO",
+          "Banco do povo",
+          "Bolsa Família",
+          "CENTRO COMUNITÁRIO",
+          "CENTRO COMUNITÁRIO MORRO DO ABRIGO",
+          "CIP BOIÇUCANGA",
+          "CIP TOPOLÂNDIA",
+          "COORDENADORIA DA MULHER",
+          "CRAS",
+          "CRAS - Boiçucanga",
+          "CRAS - Costa Norte",
+          "CRAS - TOPOLANDIA",
+          "CREAS",
+          "Cadastro único",
+          "Casa da Criança - Barequeçaba",
+          "Casa da Poderosa",
+          "Casa do Acolhimento - Pontal da Cruz",
+          "Casa do Conselho",
+          "Cidadão Criança",
+          "Conselho Tutelar",
+          "Conselho Tutelar - Boiçucanga",
+          "Departamento de Desenvolvimento Humano",
+          "Departamento de Relações de Emprego e Trabalho",
+          "Divisão de Assistência Social",
+          "Divisão de Auxílio ao Trabalhador",
+          "Divisão de Formação Profissional",
+          "Divisão de Geração de Renda",
+          "Divisão de Projetos Sociais",
+          "NASI - Costa Sul",
+          "Nucleo de Atendimento São Francisco",
+          "Núcleo de Atendimento - Costa Sul",
+          "Núcleo de Atendimento Costa Norte",
+          "PAT",
+          "PAT Regional Costa Norte",
+          "PROJETO VIRAÇÃO",
+          "Projeto Garoça",
+          "Regional Costa Norte",
+          "SEBRAE"
+        ],
+        SEDUC: [
+          "ADRIANA VASQUES",
+          "Almoxarifado Educação",
+          "CIP",
+          "CRECHE BAREQUECABA",
+          "CRECHE DIVA BERNARDINO",
+          "CRECHE DONA LAURINDA",
+          "CRECHE DÉBORA TAVARES BAHIA",
+          "CRECHE MARIA FERNANDA",
+          "CRECHE MARIA LEONARDA",
+          "CRECHE MEIRE VASQUES",
+          "CRECHE SEMIRAMIS",
+          "Coordenadoria Pedagógica",
+          "Departamento Administrativo",
+          "Departamento Pedagógico",
+          "Departamento de Planejamento",
+          "Div. de Plan. Orçamentário e Equipamentos Educacionais",
+          "Divisão de Administração",
+          "Divisão de Recursos Humanos",
+          "Divisão de Rede Física",
+          "Divisão de Tecnologia da Informação",
+          "EE WALKIR VERGANI",
+          "EM ABRAS DO UNA",
+          "EM ANTONIO LUIZ MONTEIRO",
+          "EM BORACEIA",
+          "EM CAMBURI",
+          "EM CYNTHIA CLIQUET LUCIANO",
+          "EM DC TAVARES",
+          "EM ENSEADA",
+          "EM GUIOMAR",
+          "EM H BOTELHO",
+          "EM IRAYDES LOBO VIANA DO REGO",
+          "EM J G SANTANA",
+          "EM J M ROSA",
+          "EM JOANA ALVES",
+          "EM JUQUEI",
+          "EM LUIZA HELENA DE BARROS",
+          "EM M A RANGEL",
+          "EM M C D SANTOS",
+          "EM M TRIGO",
+          "EM MACHADO ROSA",
+          "EM MARIA FRANCISCA",
+          "EM MARIA VIRGINIA SILVA",
+          "EM MFSM TAVOLARO",
+          "EM NAIR RIBEIRO",
+          "EM PLINIO GO SANTOS",
+          "EM Prof Edileusa Brasil de Oliveira",
+          "EM S C BITTENCOURT",
+          "EM SOLANGE DE PAULA",
+          "EM VERENA ODORIA",
+          "EM WALFRIDO M MONTEIRO",
+          "EMEI ALGODAO DOCE",
+          "EMEI BAREQUECABA",
+          "EMEI BRANCA DE NEVE",
+          "EMEI CANTO DO MAR",
+          "EMEI CENTRO",
+          "EMEI CHAPEUZINHO",
+          "EMEI ELEFANTE",
+          "EMEI MUNDO ENCANTADO",
+          "EMEI PETELECO",
+          "EMEI PINGO DE GENTE",
+          "EMEI PONEI AZUL",
+          "EMEI PONTAL DA CRUZ",
+          "EMEI SAO FRANCISCO",
+          "EMEI SERTAO DO CAMBURI",
+          "EMEI TOPOLANDIA",
+          "EMEI VL AMELIA",
+          "Escola Guiomar",
+          "HENRIQUE TAVARES",
+          "JOÃO GABRIEL DE SANTANA",
+          "PROF. DR. JOSÉ MACHADO ROSA",
+          "Supervisão Pedagógica",
+          "TI"
+        ],
+        SEESP: [
+          "Departamento de Esportes",
+          "Departamento de Lazer e Recreação",
+          "Divisão Administrativa",
+          "Divisão de Esportes",
+          "Divisão de Eventos Esportivos",
+          "Divisão de Eventos de Lazer e Recreação",
+          "Divisão de Formação Esportiva",
+          "Divisão de Manutenção de Praças Esportivas",
+          "Divisão de Projetos da Juventude",
+          "Escola de Vela"
+        ],
+        SEFAZ: [
+          "Auditoria de Controladoria Interna",
+          "Cadastro Técnico",
+          "DIV FISC DE POSTURAS MUNICIPAIS",
+          "Departamento de Receita",
+          "Divisão Financeira",
+          "Divisão de Cadastro Fiscal - AGILIZA",
+          "Divisão de Cadastro Técnico",
+          "Divisão de Dívida Ativa e Cobrança",
+          "Divisão de Fiscalização de Posturas Municipais",
+          "Divisão de Inspetoria Fiscal",
+          "Divisão de Planejamento Econômico",
+          "Divisão de Tesouraria",
+          "Divisão de Tributação",
+          "Recepção"
+        ],
+        SEGOV: [
+          "Cartório Eleitoral Centro",
+          "Centro Comunitário Jaraguá",
+          "Cerimonial",
+          "Conselho Tutelar",
+          "Departamento de Gabinete do Vice-Prefeito",
+          "Divisão Administrativa",
+          "Divisão de Atendimento ao Usuário",
+          "Divisão de Gestão e Sistema",
+          "Divisão de Jornalismo",
+          "Divisão de Marketing",
+          "Divisão de Portos e Energia",
+          "Divisão de Relações Públicas",
+          "Divisão de Tecnologia e Qualidade",
+          "Fundo Social",
+          "Junta Militar",
+          "Ouvidoria",
+          "SEGOV"
+        ],
+        SEGUR: [
+          "Base da rua da praia",
+          "COI",
+          "Canil",
+          "Corregedoria",
+          "Departamento da Guarda Municipal",
+          "Divisão Administrativa",
+          "Divisão da Guarda Civil",
+          "Divisão da Guarda Patrimonial",
+          "Divisão de Defesa Civil",
+          "Divisão de Defesa Civil PG",
+          "Divisão de Processamento de Multas",
+          "Divisão de Transporte - Rodoviária",
+          "Divisão do Tráfego",
+          "Guarda Mirim",
+          "Monitoramento"
+        ],
+        SEHAB: [
+          "CONSELHO MUNICIPAL DE HABITAÇÃO CMHRF",
+          "Departamento Administrativo",
+          "Departamento de Habitação",
+          "Div. de Desenvolvimento Urbano e Integração Regional",
+          "Divisão de Contratos e Convênios",
+          "Divisão de Geoprocessamento",
+          "Divisão de Habitação Popular",
+          "Divisão de Orçamento",
+          "Divisão de Projetos Urbanísticos",
+          "Recepção"
+        ],
+        SEMAM: [
+          "Departamento de Meio Ambiente",
+          "Departamento de Pesca e Abastecimento",
+          "Divisão - Licenciamento Ambiental",
+          "Divisão de Agricultura e Abastecimento",
+          "Divisão de Educação Ambiental",
+          "Divisão de Fiscalização de Agressões Ambientais",
+          "Divisão de Pesca",
+          "Divisão de Recursos Hídricos",
+          "Divisão de Resíduos Urbanos",
+          "Divisão de Saneamento",
+          "Observatório"
+        ],
+        SEO: [
+          "Departamento de Obras Particulares",
+          "Departamento de Obras Públicas",
+          "Divisão Administrativa",
+          "Divisão de Fiscalização",
+          "Divisão de Fiscalização de Obras Públicas",
+          "Divisão de Gerenciamento de Contratos",
+          "Divisão de Licenciamento Ambiental",
+          "Divisão de Licenciamento de Obras Particulares",
+          "Divisão de Projetos e Orçamentos",
+          "Divisão de Pré-análise de Projetos",
+          "Divisão de Topografia",
+          "Protocolo",
+          "Secretaria de Obras"
+        ],
+        SEPEDI: [
+          "Departamento de Políticas das Pessoas com Deficiência",
+          "Departamento de Políticas de Pessoas Idosas",
+          "Divisão Administrativa",
+          "Divisão de Atendimento Especializado ao Idoso",
+          "Divisão de Atendimento e Benefícios",
+          "Divisão de Programas e Projetos Inclusivos",
+          "Divisão de Programas e Projetos a Pessoas Idosas"
+        ],
+        SEPLAN: [
+          "ADM",
+          "Administrativo",
+          "Departamento de Planejamento",
+          "Departamento de Tecnologia e Informação"
+        ],
+        SESAU: [
+          "ALMOXARIFADO DA SAÚDE",
+          "Assistência Social",
+          "CAPS AD",
+          "CAPS INFANTIL",
+          "CAPS1 - TOPOLANDIA",
+          "CASA DA DENGUE",
+          "CEMIN - Topolândia",
+          "CENTRAL DE REGULAÇÃO",
+          "CENTRO DE REABILITAÇÃO BOIÇUCANGA",
+          "CENTRO ESPECIALIDADES COSTA NORTE",
+          "CEO - Centro de Especialidades Odontologicas",
+          "CIAMA - Topolândia",
+          "COMUS",
+          "Centro de Saude Enseada",
+          "Centro de Saúde Centro",
+          "Centro de saúde Topolândia",
+          "DEPARTAMENTO DE PLANEJAMENTO EM SAÚDE",
+          "Departamento de Administração e Controle",
+          "Departamento de Planejamto",
+          "Departamento de Vigilância e Saúde",
+          "Divisão Administrativa",
+          "Divisão Médica",
+          "Divisão Odontológica",
+          "Divisão de Avaliação e Controle",
+          "Divisão de Controle de Zoonoses e Vetores",
+          "Divisão de Emergências",
+          "Divisão de Enfermagem e Técnicos",
+          "Divisão de Expediente",
+          "Divisão de Ouvidoria",
+          "Divisão de Programas",
+          "Divisão de Recursos Humanos",
+          "Divisão de Tráfego Centro e Costa Norte",
+          "Divisão de Tráfego Costa Sul",
+          "Divisão de Vigilância Epidemiológica",
+          "Divisão de Vigilância Sanitária",
+          "FUNDAÇÃO DE SAÚDE",
+          "FUNDO MUNICIPAL DE SAÚDE",
+          "Farmácia - Rodoviária",
+          "GABINETE SAÚDE",
+          "HOSPITAL",
+          "HOSPITAL DAS CLÍNICAS BOIÇUCANGA",
+          "Monitoramento COVID-19",
+          "PSF PAÚBA",
+          "Posto de Saude Barequeçaba",
+          "REABILITAÇÃO TOPOLANDIA",
+          "REFORÇA",
+          "SAMU",
+          "Serviço Social",
+          "UBS Boiçucanga",
+          "UBS Enseada",
+          "UBS Morro do Abrigo",
+          "USF BAREQUEÇABA",
+          "USF BARRA DO SAÍ",
+          "USF BARRA DO UNA",
+          "USF BOIÇUCANGA 1",
+          "USF BOIÇUCANGA 2",
+          "USF CAMBURI",
+          "USF CANTO DO MAR",
+          "USF CENTRO",
+          "USF ENSEADA 1",
+          "USF ENSEADA 2",
+          "USF ITATINGA 1",
+          "USF ITATINGA 2",
+          "USF JARAGUA",
+          "USF JUQUEI 1",
+          "USF JUQUEI 2",
+          "USF MARESIAS 2",
+          "USF MARESIAS I",
+          "USF MORRO DO ABRIGO",
+          "USF OLARIA",
+          "USF PONTAL DA CRUZ",
+          "USF VARADOURO",
+          "USO",
+          "USO - Vila Amélia"
+        ],
+        SESEP: [
+          "Dep. da Adm. Centro",
+          "Dep. da Adm. Costa Norte",
+          "Dep. da Adm. Costa Sul",
+          "Dep. da Adm. Topolândia",
+          "Departamento de Frota",
+          "Divisão Administrativa",
+          "Divisão Boiçucanga",
+          "Divisão Centro Sul",
+          "Divisão Costa Norte",
+          "Divisão Juquehy",
+          "Divisão Maresias",
+          "Divisão de Cemitérios",
+          "Divisão de Centro Norte",
+          "Divisão de Custo Financeiro",
+          "Reg. Barequeçaba",
+          "Regional Costa Sul",
+          "Topolândia",
+          "VIVEIRO CENTRAL"
+        ],
+        SETUR: [
+          "Batuíra",
+          "Biblioteca",
+          "CIT",
+          "Casa da Arte",
+          "Casa da Cultura",
+          "Casa da Música",
+          "Departamento de Cultura",
+          "Departamento de Patrimônio",
+          "Departamento de Turismo",
+          "Divisão de Administração dos Balneários",
+          "Divisão de Eventos Culturais",
+          "Divisão de Fomento ao Turismo",
+          "Divisão de Patrimônio Histórico",
+          "Divisão de Terminais Rodoviários",
+          "Fundação Deodato Santana",
+          "Núcleo de Arqueologia",
+          "Praça do pôr do sol",
+          "Projeto Guri",
+          "Teatro",
+          "VIDA MARINHA"
+        ],
+        SEURB: [
+          "Cadastro Técnico",
+          "Departamento Administrativo",
+          "Departamento de Planejamento",
+          "Divisão de Cadastro Imobiliário",
+          "Divisão de Fiscalização de Obras Particulares",
+          "Secretaria de Urbanismo"
+        ]
+      };
+
+      secretariaSelect.addEventListener("change", function () {
+        const selectedSecretaria = this.value;
+        departamentoSelect.innerHTML =
+          '<option value="" disabled selected hidden>Escolha...</option>';
+
+        if (selectedSecretaria && departamentosPorSecretaria[selectedSecretaria]) {
+          departamentosPorSecretaria[selectedSecretaria].forEach((dep) => {
+            const option = document.createElement("option");
+            option.value = dep;
+            option.textContent = dep;
+            departamentoSelect.appendChild(option);
+          });
+          departamentoSelect.disabled = false;
+        } else {
+          departamentoSelect.disabled = true;
+        }
+      });
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        var formData = new FormData(form);
+
+        fetch(scriptURL, { method: "POST", body: formData })
+          .then((response) => {
+            swal("Sucesso", "Dados enviados com sucesso!", "success");
+            form.reset();
+            departamentoSelect.innerHTML =
+              '<option value="" disabled selected hidden>Selecione uma secretaria primeiro...</option>';
+            departamentoSelect.disabled = true;
+          })
+          .catch((error) => {
+            swal("Erro", "Algo deu errado. Tente novamente!", "error");
+            console.error('Erro:', error);
+          });
+      });
+
+      searchButton.addEventListener("click", () => {
+        const patrimonio = searchInput.value.trim();
+        if (!patrimonio) {
+          swal("Atenção", "Por favor, digite o Nº Patrimônio!", "warning");
+          return;
+        }
+
+        fetch(`${scriptURL}?patrimonio=${encodeURIComponent(patrimonio)}`, { method: "GET" })
+          .then((response) => {
+            console.log('Status HTTP:', response.status);
+            return response.text();
+          })
+          .then((text) => {
+            console.log('Resposta bruta:', text);
+            try {
+              const data = JSON.parse(text);
+              if (data.result === "success" && data.data) {
+                const result = data.data;
+                const message = `
+                  <strong>Nº Patrimônio:</strong> ${result['patrimonio']}<br>
+                  <strong>Descrição do Bem:</strong> ${result['descricao']}<br>
+                  <strong>Secretaria:</strong> ${result['secretaria']}<br>
+                  <strong>Departamento:</strong> ${result['departamento']}<br>
+                  <strong>Responsável:</strong> ${result['responsavel']}<br>
+                  <strong>Origem do Bem:</strong> ${result['origem']}<br>
+                  <strong>Estado de Conservação:</strong> ${result['conservacao']}<br>
+                  <strong>Situação Atual:</strong> ${result['situacao']}<br>
+                  <strong>Data da Aquisição:</strong> ${result['aquisicao']}<br>
+                  <strong>Observações:</strong> ${result['observacoes'] || 'Nenhuma'}<br>
+                  <strong>Data de Cadastro:</strong> ${result['timestamp'] || 'N/A'}
+                `;
+                swal({
+                  title: "Patrimônio Encontrado",
+                  html: message,
+                  type: "success"
+                });
+              } else {
+                swal("Não Encontrado", "Nenhum patrimônio encontrado com este número!", "info");
+              }
+            } catch (error) {
+              console.error('Erro ao parsear JSON:', error, 'Resposta:', text);
+              throw error;
+            }
+          })
+          .catch((error) => {
+            swal("Erro", "Falha ao realizar a pesquisa. Tente novamente!", "error");
+            console.error('Erro na pesquisa:', error);
+          });
+      });
+
+      clearButton.addEventListener("click", () => {
+        form.reset();
+        departamentoSelect.innerHTML =
+          '<option value="" disabled selected hidden>Selecione uma secretaria primeiro...</option>';
+        departamentoSelect.disabled = true;
+        swal("Campos Limpos", "Os campos do formulário foram limpos!", "info");
+      });
+    </script>
+  </body>
+</html>
+o</title>
     <link rel="icon" type="image/x-icon" href="/tic2025/favicon.ico">
     <link
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
