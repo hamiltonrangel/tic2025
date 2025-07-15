@@ -41,6 +41,25 @@
         max-width: 40%;
         margin-left: 2%;
       }
+      .batch-checkbox-container {
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+      }
+      .batch-checkbox-container label {
+        font-weight: bold;
+        color: #495057;
+        margin-bottom: 0;
+      }
+      .hidden-field {
+        display: none;
+      }
+      .batch-mode-active {
+        background-color: #e7f3ff;
+        border-color: #007bff;
+      }
     </style>
   </head>
   <body class="bg-light">
@@ -52,6 +71,19 @@
           class="logo"
         />
         <h4 class="text-center mb-4">Pesquisa e Cadastro de Patrimônio - TIC2025</h4>
+        
+        <!-- Checkbox de Cadastro em Lote -->
+        <div class="batch-checkbox-container" id="batch-container">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="batch-mode" />
+            <label class="form-check-label" for="batch-mode">
+              Cadastro em Lote (Modo Rápido)
+            </label>
+          </div>
+          <small class="form-text text-muted">
+            Marque esta opção para exibir apenas os campos essenciais e agilizar o cadastro em massa.
+          </small>
+        </div>
         
         <!-- Seção de Pesquisa -->
         <div class="search-container">
@@ -162,13 +194,13 @@
               <option value="SEURB">SEURB</option>
             </select>
           </div>
-          <div class="form-group">
+          <div class="form-group optional-field">
             <label for="departamento">Departamento:</label>
             <select class="form-control" name="departamento" id="departamento" required>
               <option value="" disabled selected hidden>Selecione uma: Escolha uma secretaria primeiro...</option>
             </select>
           </div>
-          <div class="form-group">
+          <div class="form-group optional-field">
             <label for="responsavel">Responsável:</label>
             <input
               class="form-control"
@@ -179,7 +211,7 @@
               required
             />
           </div>
-          <div class="form-group">
+          <div class="form-group optional-field">
             <label for="origem">Origem do Bem:</label>
             <select class="form-control" name="origem" id="origem" required>
               <option value="" disabled selected hidden>Escolha...</option>
@@ -189,7 +221,7 @@
               <option value="Patrimônio da Prefeitura">Patrimônio da Prefeitura</option>
             </select>
           </div>
-          <div class="form-group">
+          <div class="form-group optional-field">
             <label for="conservacao">Estado de Conservação:</label>
             <select class="form-control" name="conservacao" id="conservacao" required>
               <option value="" disabled selected hidden>Escolha...</option>
@@ -198,7 +230,7 @@
               <option value="Ruim">Ruim</option>
             </select>
           </div>
-          <div class="form-group">
+          <div class="form-group optional-field">
             <label for="situacao">Situação Atual:</label>
             <select class="form-control" name="situacao" id="situacao" required>
               <option value="" disabled selected hidden>Escolha...</option>
@@ -207,7 +239,7 @@
               <option value="Em Manutenção">Em Manutenção</option>
             </select>
           </div>
-          <div class="form-group">
+          <div class="form-group optional-field">
             <label for="aquisicao">Data da Aquisição:</label>
             <input
               class="form-control"
@@ -217,7 +249,7 @@
               required
             />
           </div>
-          <div class="form-group">
+          <div class="form-group optional-field">
             <label for="observacoes">Observações:</label>
             <textarea
               class="form-control"
@@ -245,6 +277,9 @@
       const searchButton = document.getElementById("search-button");
       const searchInput = document.getElementById("search-patrimonio");
       const clearButton = document.getElementById("clear-button");
+      const batchModeCheckbox = document.getElementById("batch-mode");
+      const batchContainer = document.getElementById("batch-container");
+      const optionalFields = document.querySelectorAll(".optional-field");
 
       const departamentosPorSecretaria = {
         AGILIZA: ["ADM"],
@@ -642,6 +677,61 @@
         ]
       };
 
+      // Função para alternar o modo de cadastro em lote
+      function toggleBatchMode() {
+        const isBatchMode = batchModeCheckbox.checked;
+        
+        if (isBatchMode) {
+          // Ativar modo de cadastro em lote
+          batchContainer.classList.add('batch-mode-active');
+          
+          // Esconder campos opcionais
+          optionalFields.forEach(field => {
+            field.classList.add('hidden-field');
+            // Remover required dos campos escondidos
+            const inputs = field.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+              input.removeAttribute('required');
+            });
+          });
+          
+          // Limpar campos escondidos
+          optionalFields.forEach(field => {
+            const inputs = field.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+              if (input.type === 'checkbox' || input.type === 'radio') {
+                input.checked = false;
+              } else {
+                input.value = '';
+              }
+            });
+          });
+          
+          // Reset do departamento
+          departamentoSelect.innerHTML = '<option value="" disabled selected hidden>Selecione uma secretaria primeiro...</option>';
+          departamentoSelect.disabled = true;
+          
+        } else {
+          // Desativar modo de cadastro em lote
+          batchContainer.classList.remove('batch-mode-active');
+          
+          // Mostrar campos opcionais
+          optionalFields.forEach(field => {
+            field.classList.remove('hidden-field');
+            // Restaurar required nos campos necessários
+            const inputs = field.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+              if (input.id !== 'observacoes') { // observações não é obrigatório
+                input.setAttribute('required', '');
+              }
+            });
+          });
+        }
+      }
+
+      // Event listener para o checkbox de cadastro em lote
+      batchModeCheckbox.addEventListener('change', toggleBatchMode);
+
       secretariaSelect.addEventListener("change", function () {
         const selectedSecretaria = this.value;
         departamentoSelect.innerHTML =
@@ -663,6 +753,17 @@
       form.addEventListener("submit", (e) => {
         e.preventDefault();
         var formData = new FormData(form);
+        
+        // Se estiver em modo de cadastro em lote, preencher campos padrão
+        if (batchModeCheckbox.checked) {
+          formData.set('departamento', 'Cadastro em Lote');
+          formData.set('responsavel', 'TIC2025');
+          formData.set('origem', 'Patrimônio da Prefeitura');
+          formData.set('conservacao', 'Bom');
+          formData.set('situacao', 'Ativo');
+          formData.set('aquisicao', new Date().toISOString().split('T')[0]);
+          formData.set('observacoes', 'Cadastrado em lote via TIC2025');
+        }
 
         fetch(scriptURL, { method: "POST", body: formData })
           .then((response) => {
@@ -671,6 +772,11 @@
             departamentoSelect.innerHTML =
               '<option value="" disabled selected hidden>Selecione uma secretaria primeiro...</option>';
             departamentoSelect.disabled = true;
+            
+            // Manter o estado do checkbox após envio
+            if (batchModeCheckbox.checked) {
+              toggleBatchMode();
+            }
           })
           .catch((error) => {
             swal("Erro", "Algo deu errado. Tente novamente!", "error");
@@ -733,8 +839,14 @@
         departamentoSelect.innerHTML =
           '<option value="" disabled selected hidden>Selecione uma secretaria primeiro...</option>';
         departamentoSelect.disabled = true;
+        
+        // Reset do checkbox e modo
+        batchModeCheckbox.checked = false;
+        toggleBatchMode();
+        
         swal("Campos Limpos", "Os campos do formulário foram limpos!", "info");
       });
     </script>
   </body>
 </html>
+
