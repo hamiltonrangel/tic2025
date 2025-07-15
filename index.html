@@ -115,7 +115,7 @@
             <label for="descricao">Descrição do Bem:</label>
             <select class="form-control" name="descricao" id="descricao" required>
               <option value="" disabled selected hidden>Escolha...</option>
-              <optgroup label="Computadores e Periféricos">
+              <optgroup label="Computadores e Periféricos" id="full-options">
                 <option value="Computador Desktop">Desktop</option>
                 <option value="Mini-PC">Mini-PC</option>
                 <option value="Notebook">Notebook</option>
@@ -274,12 +274,23 @@
       const form = document.forms["submit-to-google-sheet"];
       const secretariaSelect = document.getElementById("secretaria");
       const departamentoSelect = document.getElementById("departamento");
+      const descricaoSelect = document.getElementById("descricao");
       const searchButton = document.getElementById("search-button");
       const searchInput = document.getElementById("search-patrimonio");
       const clearButton = document.getElementById("clear-button");
       const batchModeCheckbox = document.getElementById("batch-mode");
       const batchContainer = document.getElementById("batch-container");
       const optionalFields = document.querySelectorAll(".optional-field");
+
+      // Opções completas e opções para modo lote
+      const fullDescricaoOptions = descricaoSelect.innerHTML;
+      const batchDescricaoOptions = `
+        <option value="" disabled selected hidden>Escolha...</option>
+        <option value="Computador Desktop">Desktop</option>
+        <option value="Mini-PC">Mini-PC</option>
+        <option value="Notebook">Notebook</option>
+        <option value="Monitor">Monitor</option>
+      `;
 
       const departamentosPorSecretaria = {
         AGILIZA: ["ADM"],
@@ -683,46 +694,52 @@
         
         if (isBatchMode) {
           // Ativar modo de cadastro em lote
-          batchContainer.classList.add('batch-mode-active');
+          batchContainer.classList.add("batch-mode-active");
+          
+          // Alterar opções do campo Descrição do Bem
+          descricaoSelect.innerHTML = batchDescricaoOptions;
           
           // Esconder campos opcionais
           optionalFields.forEach(field => {
-            field.classList.add('hidden-field');
+            field.classList.add("hidden-field");
             // Remover required dos campos escondidos
-            const inputs = field.querySelectorAll('input, select, textarea');
+            const inputs = field.querySelectorAll("input, select, textarea");
             inputs.forEach(input => {
-              input.removeAttribute('required');
+              input.removeAttribute("required");
             });
           });
           
           // Limpar campos escondidos
           optionalFields.forEach(field => {
-            const inputs = field.querySelectorAll('input, select, textarea');
+            const inputs = field.querySelectorAll("input, select, textarea");
             inputs.forEach(input => {
-              if (input.type === 'checkbox' || input.type === 'radio') {
+              if (input.type === "checkbox" || input.type === "radio") {
                 input.checked = false;
               } else {
-                input.value = '';
+                input.value = "";
               }
             });
           });
           
           // Reset do departamento
-          departamentoSelect.innerHTML = '<option value="" disabled selected hidden>Selecione uma secretaria primeiro...</option>';
+          departamentoSelect.innerHTML = "<option value=\"\" disabled selected hidden>Selecione uma secretaria primeiro...</option>";
           departamentoSelect.disabled = true;
           
         } else {
           // Desativar modo de cadastro em lote
-          batchContainer.classList.remove('batch-mode-active');
+          batchContainer.classList.remove("batch-mode-active");
+          
+          // Restaurar opções completas do campo Descrição do Bem
+          descricaoSelect.innerHTML = fullDescricaoOptions;
           
           // Mostrar campos opcionais
           optionalFields.forEach(field => {
-            field.classList.remove('hidden-field');
+            field.classList.remove("hidden-field");
             // Restaurar required nos campos necessários
-            const inputs = field.querySelectorAll('input, select, textarea');
+            const inputs = field.querySelectorAll("input, select, textarea");
             inputs.forEach(input => {
-              if (input.id !== 'observacoes') { // observações não é obrigatório
-                input.setAttribute('required', '');
+              if (input.id !== "observacoes") { // observações não é obrigatório
+                input.setAttribute("required", "");
               }
             });
           });
@@ -730,12 +747,12 @@
       }
 
       // Event listener para o checkbox de cadastro em lote
-      batchModeCheckbox.addEventListener('change', toggleBatchMode);
+      batchModeCheckbox.addEventListener("change", toggleBatchMode);
 
       secretariaSelect.addEventListener("change", function () {
         const selectedSecretaria = this.value;
         departamentoSelect.innerHTML =
-          '<option value="" disabled selected hidden>Escolha...</option>';
+          "<option value=\"\" disabled selected hidden>Escolha...</option>";
 
         if (selectedSecretaria && departamentosPorSecretaria[selectedSecretaria]) {
           departamentosPorSecretaria[selectedSecretaria].forEach((dep) => {
@@ -756,31 +773,35 @@
         
         // Se estiver em modo de cadastro em lote, preencher campos padrão
         if (batchModeCheckbox.checked) {
-          formData.set('departamento', 'Cadastro em Lote');
-          formData.set('responsavel', 'TIC2025');
-          formData.set('origem', 'Patrimônio da Prefeitura');
-          formData.set('conservacao', 'Bom');
-          formData.set('situacao', 'Ativo');
-          formData.set('aquisicao', new Date().toISOString().split('T')[0]);
-          formData.set('observacoes', 'Cadastrado em lote via TIC2025');
+          formData.set("departamento", "");
+          formData.set("responsavel", "");
+          formData.set("origem", "");
+          formData.set("conservacao", "");
+          formData.set("situacao", "");
+          formData.set("aquisicao", "");
+          formData.set("observacoes", "");
         }
 
         fetch(scriptURL, { method: "POST", body: formData })
           .then((response) => {
             swal("Sucesso", "Dados enviados com sucesso!", "success");
-            form.reset();
-            departamentoSelect.innerHTML =
-              '<option value="" disabled selected hidden>Selecione uma secretaria primeiro...</option>';
-            departamentoSelect.disabled = true;
             
-            // Manter o estado do checkbox após envio
+            // Limpeza diferenciada baseada no modo
             if (batchModeCheckbox.checked) {
-              toggleBatchMode();
+              // No modo lote, limpar apenas o campo Nº Patrimônio
+              document.getElementById("patrimonio").value = "";
+              // Manter Descrição do Bem e Secretaria preenchidos
+            } else {
+              // No modo normal, limpar tudo
+              form.reset();
+              departamentoSelect.innerHTML =
+                "<option value=\"\" disabled selected hidden>Selecione uma secretaria primeiro...</option>";
+              departamentoSelect.disabled = true;
             }
           })
           .catch((error) => {
             swal("Erro", "Algo deu errado. Tente novamente!", "error");
-            console.error('Erro:', error);
+            console.error("Erro:", error);
           });
       });
 
@@ -793,27 +814,27 @@
 
         fetch(`${scriptURL}?patrimonio=${encodeURIComponent(patrimonio)}`, { method: "GET" })
           .then((response) => {
-            console.log('Status HTTP:', response.status);
+            console.log("Status HTTP:", response.status);
             return response.text();
           })
           .then((text) => {
-            console.log('Resposta bruta:', text);
+            console.log("Resposta bruta:", text);
             try {
               const data = JSON.parse(text);
               if (data.result === "success" && data.data) {
                 const result = data.data;
                 const message = `
-                  <strong>Nº Patrimônio:</strong> ${result['patrimonio']}<br>
-                  <strong>Descrição do Bem:</strong> ${result['descricao']}<br>
-                  <strong>Secretaria:</strong> ${result['secretaria']}<br>
-                  <strong>Departamento:</strong> ${result['departamento']}<br>
-                  <strong>Responsável:</strong> ${result['responsavel']}<br>
-                  <strong>Origem do Bem:</strong> ${result['origem']}<br>
-                  <strong>Estado de Conservação:</strong> ${result['conservacao']}<br>
-                  <strong>Situação Atual:</strong> ${result['situacao']}<br>
-                  <strong>Data da Aquisição:</strong> ${result['aquisicao']}<br>
-                  <strong>Observações:</strong> ${result['observacoes'] || 'Nenhuma'}<br>
-                  <strong>Data de Cadastro:</strong> ${result['timestamp'] || 'N/A'}
+                  <strong>Nº Patrimônio:</strong> ${result["patrimonio"]}<br>
+                  <strong>Descrição do Bem:</strong> ${result["descricao"]}<br>
+                  <strong>Secretaria:</strong> ${result["secretaria"]}<br>
+                  <strong>Departamento:</strong> ${result["departamento"]}<br>
+                  <strong>Responsável:</strong> ${result["responsavel"]}<br>
+                  <strong>Origem do Bem:</strong> ${result["origem"]}<br>
+                  <strong>Estado de Conservação:</strong> ${result["conservacao"]}<br>
+                  <strong>Situação Atual:</strong> ${result["situacao"]}<br>
+                  <strong>Data da Aquisição:</strong> ${result["aquisicao"]}<br>
+                  <strong>Observações:</strong> ${result["observacoes"] || "Nenhuma"}<br>
+                  <strong>Data de Cadastro:</strong> ${result["timestamp"] || "N/A"}
                 `;
                 swal({
                   title: "Patrimônio Encontrado",
@@ -824,20 +845,20 @@
                 swal("Não Encontrado", "Nenhum patrimônio encontrado com este número!", "info");
               }
             } catch (error) {
-              console.error('Erro ao parsear JSON:', error, 'Resposta:', text);
+              console.error("Erro ao parsear JSON:", error, "Resposta:", text);
               throw error;
             }
           })
           .catch((error) => {
             swal("Erro", "Falha ao realizar a pesquisa. Tente novamente!", "error");
-            console.error('Erro na pesquisa:', error);
+            console.error("Erro na pesquisa:", error);
           });
       });
 
       clearButton.addEventListener("click", () => {
         form.reset();
         departamentoSelect.innerHTML =
-          '<option value="" disabled selected hidden>Selecione uma secretaria primeiro...</option>';
+          "<option value=\"\" disabled selected hidden>Selecione uma secretaria primeiro...</option>";
         departamentoSelect.disabled = true;
         
         // Reset do checkbox e modo
