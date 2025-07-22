@@ -31,6 +31,7 @@
         margin: 0 auto 20px;
       }
       .search-container {
+        margin-top: 20px;
         margin-bottom: 20px;
       }
       .search-container input {
@@ -52,19 +53,6 @@
           class="logo"
         />
         <h4 class="text-center mb-4">Pesquisa e Cadastro de Patrimônio - TIC2025</h4>
-        
-        <!-- Seção de Pesquisa -->
-        <div class="search-container">
-          <input
-            class="form-control"
-            type="text"
-            id="search-patrimonio"
-            placeholder="Digite o Nº Patrimônio"
-          />
-          <button type="button" class="btn btn-secondary" id="search-button">
-            Pesquisar
-          </button>
-        </div>
 
         <!-- Formulário de Cadastro -->
         <form id="submit-to-google-sheet">
@@ -233,6 +221,20 @@
             Limpar Campos
           </button>
         </form>
+        
+        <!-- Seção de Pesquisa movida para o final -->
+        <div class="search-container">
+          <h5 class="text-center mb-3">Pesquisar Patrimônio</h5>
+          <input
+            class="form-control"
+            type="text"
+            id="search-patrimonio"
+            placeholder="Digite o Nº Patrimônio"
+          />
+          <button type="button" class="btn btn-secondary" id="search-button">
+            Pesquisar
+          </button>
+        </div>
       </div>
     </div>
 
@@ -662,10 +664,9 @@
         fetch(scriptURL, { method: "POST", body: formData })
           .then((response) => {
             swal("Sucesso", "Dados enviados com sucesso!", "success");
-            form.reset();
-            departamentoSelect.innerHTML =
-              '<option value="" disabled selected hidden>Selecione uma secretaria primeiro...</option>';
-            departamentoSelect.disabled = true;
+            // Limpar apenas os campos específicos após o envio
+            document.getElementById("patrimonio").value = "";
+            document.getElementById("observacoes").value = "";
           })
           .catch((error) => {
             swal("Erro", "Algo deu errado. Tente novamente!", "error");
@@ -733,3 +734,4 @@
     </script>
   </body>
 </html>
+
